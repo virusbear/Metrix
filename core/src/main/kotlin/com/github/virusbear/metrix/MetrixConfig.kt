@@ -1,0 +1,43 @@
+package com.github.virusbear.metrix
+
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.modules.EmptySerializersModule
+import kotlinx.serialization.properties.Properties
+import kotlinx.serialization.properties.decodeFromStringMap
+import kotlinx.serialization.properties.encodeToStringMap
+import java.io.File
+
+@Serializable
+data class MetrixConfig internal constructor(
+    val port: Int = 80,
+    val includeJvm: Boolean = false,
+    val scrapeInterval: Long = 5,
+    val percentiles: List<Double> = emptyList()
+) {
+    private fun save(file: File) {
+        file.writeText(Properties(EmptySerializersModule).encodeToStringMap(this).toList().joinToString(separator = "\n") { (k, v) -> "$k=$v" })
+    }
+
+    companion object {
+        @OptIn(ExperimentalSerializationApi::class)
+        fun load(file: File): MetrixConfig =
+            if(!file.exists()) {
+                MetrixConfig().apply {
+                    save(file)
+                }
+            } else {
+                Properties(EmptySerializersModule)
+                    .decodeFromStringMap(
+                        file.readLines()
+                            .associate {
+                                it.split("=", limit = 2)
+                                    .let {
+                                        it[0] to it[1]
+                                    }
+                            }
+                    )
+            }
+
+    }
+}
