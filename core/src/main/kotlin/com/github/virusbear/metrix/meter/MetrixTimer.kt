@@ -42,6 +42,7 @@ class MetrixTimer(override val name: String, override val tags: Tags, private va
     override fun stop(tags: Tags) {
         samples[tags]?.let {
             record(tags, samples[tags]!!)
+            samples -= tags
         } ?: LOG.warn("No recording started for tags $tags. Skipping")
     }
 

@@ -10,8 +10,8 @@ import java.io.File
 
 @Serializable
 data class MetrixConfig internal constructor(
-    val port: Int = 80,
-    val includeJvm: Boolean = false,
+    val port: Int = 9100,
+    val includeJvm: Boolean = true,
     val scrapeInterval: Long = 5,
     val percentiles: List<Double> = emptyList()
 ) {

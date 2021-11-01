@@ -15,11 +15,11 @@ fun TickMetrics(registry: MeterRegistry) {
         time.stop(tags("server", ""))
     })
 
-    ServerTickEvents.START_WORLD_TICK.register(ServerTickEvents.StartWorldTick {
+    ServerWorldTickEvents.START_SERVER_WORLD_TICK.register(ServerWorldTickEvents.StartTick {
         count[tags("world", it.name)].inc()
         time.start(tags("world", it.name))
     })
-    ServerTickEvents.END_WORLD_TICK.register(ServerTickEvents.EndWorldTick {
+    ServerWorldTickEvents.END_SERVER_WORLD_TICK.register(ServerWorldTickEvents.EndTick {
         time.stop(tags("world", it.name))
     })
 

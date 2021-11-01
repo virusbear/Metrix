@@ -24,11 +24,17 @@ val fabric_version: String by project
 
 dependencies {
     implementation(kotlin("stdlib"))
-    api(project(":api"))
+    implementation(project(":api"))
 
     "minecraft"("com.mojang:minecraft:$minecraft_version")
     "mappings"("net.fabricmc:yarn:$yarn_mappings:v2")
 
     "modImplementation"("net.fabricmc:fabric-loader:$loader_version")
     "modImplementation"("net.fabricmc.fabric-api:fabric-api:$fabric_version")
+}
+
+val jar: Jar by tasks
+
+jar.apply {
+    archiveFileName.set("metrix-fabric-api-${project.version}.jar")
 }

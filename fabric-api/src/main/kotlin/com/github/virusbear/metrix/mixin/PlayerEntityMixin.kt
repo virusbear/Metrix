@@ -9,12 +9,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 
 @Mixin(PlayerEntity::class)
 class PlayerEntityMixin {
-    @Inject(at = [At("HEAD")], method = ["tick"])
+    @Inject(at = [At("HEAD")], method = ["method_5773()V"])
     fun onStartPlayerTick(info: CallbackInfo) {
         PlayerTickEvents.START_PLAYER_TICK.invoker().onStartTick(this as PlayerEntity)
     }
 
-    @Inject(at = [At("TAIL")], method = ["tick"])
+    @Inject(at = [At("TAIL")], method = ["method_5773()V"])
     fun onEndPlayerTick(info: CallbackInfo) {
         PlayerTickEvents.END_PLAYER_TICK.invoker().onEndTick(this as PlayerEntity)
     }

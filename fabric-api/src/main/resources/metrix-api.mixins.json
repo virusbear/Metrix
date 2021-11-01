@@ -7,7 +7,9 @@
         "PlayerEntityMixin"
     ],
     "client": [],
-    "server": [],
+    "server": [
+        "ServerWorldMixin"
+    ],
     "injectors": {
         "defaultRequire": 1
     }

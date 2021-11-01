@@ -11,12 +11,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 
 @Mixin(PlayerManager::class)
 class PlayerManagerMixin {
-    @Inject(at = [At("TAIL")], method = ["onPlayerConnect"])
+    @Inject(at = [At("TAIL")], method = ["method_14570(Lnet/minecraft/class_2535;Lnet/minecraft/class_3222;)V"])
     fun onPlayerJoin(connection: ClientConnection, player: ServerPlayerEntity, info: CallbackInfo) {
         PlayerEvents.PLAYER_JOIN.invoker().onJoin(player)
     }
 
-    @Inject(at = [At("TAIL")], method = ["remove"])
+    @Inject(at = [At("TAIL")], method = ["method_14611(Lnet/minecraft/class_3222;)V"])
     fun onPlayerLeave(player: ServerPlayerEntity, info: CallbackInfo) {
         PlayerEvents.PLAYER_LEAVE.invoker().onLeave(player)
     }
