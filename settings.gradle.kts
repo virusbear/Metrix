@@ -1,7 +1,10 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+    }
+}
+
 rootProject.name = "Metrix"
-include("core")
-include("forge")
-include("bukkit")
-include("fabric")
-include("api")
-include("fabric-api")
+include("metrix-api")
+include("metrix-micrometer")
