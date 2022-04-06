@@ -9,6 +9,14 @@ import io.micrometer.core.instrument.Gauge as MicrometerGauge
 class MetrixGauge(override val name: String, override val tags: Tags, private val registry: MeterRegistry): Gauge {
     private val gauges = HashMap<Tags, Pair<GaugeSupplier, MicrometerGauge>>()
 
+    override fun get(tags: Tags): Gauge.TaggedGauge {
+        val (supplier, _) = gauges.computeIfAbsent(tags, ::createManualGauge)
+
+        require(supplier is GaugeSupplier.Manual) { "Automatic gauge not supported by TaggedGauge." }
+
+        return supplier
+    }
+
     override fun set(tags: Tags, value: Double) {
         val (supplier, _) = gauges.computeIfAbsent(tags, ::createManualGauge)
 
@@ -46,8 +54,27 @@ class MetrixGauge(override val name: String, override val tags: Tags, private va
             .register(registry)
 
     private sealed class GaugeSupplier {
-        class Manual: GaugeSupplier() {
-            private var value = 0.0
+        class Manual: GaugeSupplier(), Gauge.TaggedGauge {
+            override var value = 0.0
+            private set
+
+            override operator fun inc(): Manual {
+                value++
+                return this
+            }
+
+            override operator fun dec(): Manual {
+                value--
+                return this
+            }
+
+            override fun plusAssign(delta: Double) {
+                value += delta
+            }
+
+            override fun minusAssign(delta: Double) {
+                value -= delta
+            }
 
             fun set(value: Double) {
                 synchronized(this.value) {
@@ -59,7 +86,6 @@ class MetrixGauge(override val name: String, override val tags: Tags, private va
                 synchronized(value) {
                     value
                 }
-
         }
 
         class Automatic(private val supplier: () -> Double): GaugeSupplier() {

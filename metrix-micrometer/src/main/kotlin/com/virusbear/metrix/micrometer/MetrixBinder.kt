@@ -15,21 +15,21 @@ class MetrixBinder: MeterBinder, MetrixRegistry {
         this.registry = registry
     }
 
-    override fun gauge(id: Identifier): Gauge =
-        registerMeter(id.toMicrometer(), ::MetrixGauge)
+    override fun gauge(id: Identifier, tags: Tags): Gauge =
+        registerMeter(id.toMicrometer(), tags, ::MetrixGauge)
 
-    override fun timer(id: Identifier): Timer =
-        registerMeter(id.toMicrometer()) { meterName, tags, registry ->
+    override fun timer(id: Identifier, tags: Tags): Timer =
+        registerMeter(id.toMicrometer(), tags) { meterName, tags, registry ->
             MetrixTimer(meterName, tags, registry)
         }
 
-    override fun counter(id: Identifier): Counter =
-        registerMeter(id.toMicrometer(), ::MetrixCounter)
+    override fun counter(id: Identifier, tags: Tags): Counter =
+        registerMeter(id.toMicrometer(), tags, ::MetrixCounter)
 
-    private fun <T: Meter> registerMeter(name: String, ctor: (String, Tags, MeterRegistry) -> T): T {
+    private fun <T: Meter> registerMeter(name: String, tags: Tags, ctor: (String, Tags, MeterRegistry) -> T): T {
         requireBound()
 
-        return ctor(name, mapOf(), registry)
+        return ctor(name, tags, registry)
     }
 
     private fun requireBound() {

@@ -4,9 +4,6 @@ plugins {
     id("signing")
 }
 
-group = "com.virusbear.metrix"
-version = "0.0.1"
-
 repositories {
     mavenCentral()
     mavenLocal()
