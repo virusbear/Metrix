@@ -59,12 +59,17 @@ object Build : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+        cleanCheckout = true
     }
 
     steps {
         gradle {
-            tasks = "clean build"
-            gradleWrapperPath = ""
+            name = "Build metrix-api"
+            tasks = ":metrix-api:clean :metrix-api:build"
+        }
+        gradle {
+            name = "Build metrix-micrometer"
+            tasks = ":metrix-micrometer:clean :metrix-micrometer:build"
         }
     }
 
