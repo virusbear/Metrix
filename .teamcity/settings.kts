@@ -5,6 +5,7 @@ import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
 import jetbrains.buildServer.configs.kotlin.buildFeatures.pullRequests
 import jetbrains.buildServer.configs.kotlin.buildSteps.gradle
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
+import jetbrains.buildServer.configs.kotlin.ui.add
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -30,7 +31,25 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 
 version = "2022.10"
 
+@JvmInline
+value class Param(
+    val value: String
+) {
+    val substitution: String
+        get() =
+            "%$value%"
+}
+
+object Params {
+    val GithubPat = Param("system.githubPat")
+}
+
 project {
+    params {
+        add {
+            param(Params.GithubPat.value, "credentialsJSON:d9036d84-fa12-4148-bb90-e770d19ea1c7")
+        }
+    }
 
     buildType(Build)
 }
@@ -61,7 +80,7 @@ object Build : BuildType({
             publisher = github {
                 githubUrl = "https://api.github.com"
                 authType = personalToken {
-                    token = ""
+                    token = Params.GithubPat.substitution
                 }
             }
             param("github_oauth_user", "virusbear")
@@ -70,7 +89,7 @@ object Build : BuildType({
             vcsRootExtId = "${DslContext.settingsRoot.id}"
             provider = github {
                 authType = token {
-                    token = ""
+                    token = Params.GithubPat.substitution
                 }
                 filterAuthorRole = PullRequests.GitHubRoleFilter.EVERYBODY
             }
