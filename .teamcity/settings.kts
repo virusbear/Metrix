@@ -83,7 +83,6 @@ object Build : BuildType({
                     token = Params.GithubPat.substitution
                 }
             }
-            param("github_oauth_user", "virusbear")
         }
         pullRequests {
             vcsRootExtId = "${DslContext.settingsRoot.id}"
@@ -94,6 +93,5 @@ object Build : BuildType({
                 filterAuthorRole = PullRequests.GitHubRoleFilter.EVERYBODY
             }
         }
-
     }
 })
