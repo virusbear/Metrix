@@ -1,5 +1,8 @@
 import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.buildFeatures.PullRequests
+import jetbrains.buildServer.configs.kotlin.buildFeatures.commitStatusPublisher
 import jetbrains.buildServer.configs.kotlin.buildFeatures.perfmon
+import jetbrains.buildServer.configs.kotlin.buildFeatures.pullRequests
 import jetbrains.buildServer.configs.kotlin.buildSteps.gradle
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
@@ -54,5 +57,24 @@ object Build : BuildType({
     features {
         perfmon {
         }
+        commitStatusPublisher {
+            publisher = github {
+                githubUrl = "https://api.github.com"
+                authType = personalToken {
+                    token = DslContext.getParameter("githubPat")
+                }
+            }
+            param("github_oauth_user", "virusbear")
+        }
+        pullRequests {
+            vcsRootExtId = "${DslContext.settingsRoot.id}"
+            provider = github {
+                authType = token {
+                    token = DslContext.getParameter("githubPat")
+                }
+                filterAuthorRole = PullRequests.GitHubRoleFilter.EVERYBODY
+            }
+        }
+
     }
 })
