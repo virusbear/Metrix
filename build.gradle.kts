@@ -1,11 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.10" apply false
+    kotlin("jvm") version "1.8.20" apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    id("org.jetbrains.dokka") version "1.8.10" apply false
 }
 
 subprojects {
+    apply(plugin = "org.jetbrains.dokka")
+
     repositories {
         mavenCentral()
         mavenLocal()
@@ -13,11 +16,11 @@ subprojects {
     }
 
     group = "com.virusbear.metrix"
-    version = "0.0.2"
+    version = "1.0"
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "16"
+            jvmTarget = "11"
         }
     }
 }

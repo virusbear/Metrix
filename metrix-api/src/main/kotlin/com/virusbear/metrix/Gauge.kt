@@ -1,31 +1,31 @@
+/*
+ * Copyright 2023 Virusbear
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.virusbear.metrix
 
-interface Gauge: Meter {
-    operator fun get(tags: Tags = emptyMap()): TaggedGauge
-
-    operator fun set(tags: Tags = emptyMap(), value: Double)
+interface Gauge: Meter<Gauge.TaggedGauge> {
     fun register(tags: Tags = emptyMap(), supplier: () -> Double)
 
-    interface TaggedGauge {
+    interface TaggedGauge: TaggedMeter {
+        val value: Double
+
         operator fun inc(): TaggedGauge
         operator fun dec(): TaggedGauge
-
-        operator fun plusAssign(delta: Double)
-        operator fun plusAssign(delta: Int) {
-            this += delta.toDouble()
-        }
-        operator fun plusAssign(delta: Long) {
-            this += delta.toDouble()
-        }
-
-        operator fun minusAssign(delta: Double)
-        operator fun minusAssign(delta: Int) {
-            this -= delta.toDouble()
-        }
-        operator fun minusAssign(delta: Long) {
-            this -= delta.toDouble()
-        }
-
-        val value: Double
+        operator fun plusAssign(delta: Number)
+        operator fun minusAssign(delta: Number)
+        fun set(value: Double)
     }
 }

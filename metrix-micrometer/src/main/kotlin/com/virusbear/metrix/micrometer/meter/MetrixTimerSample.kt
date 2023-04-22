@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-package com.virusbear.metrix
+package com.virusbear.metrix.micrometer.meter
 
-interface MeterRegistry {
-    fun gauge(id: Identifier, tags: Tags = emptyMap()): Gauge
-    fun timer(id: Identifier, tags: Tags = emptyMap()): Timer
-    fun counter(id: Identifier, tags: Tags = emptyMap()): Counter
+import io.micrometer.core.instrument.Timer
+import com.virusbear.metrix.Timer.Sample
+
+class MetrixTimerSample internal constructor(
+    private val timer: Timer,
+    private val sample: Timer.Sample
+): Sample {
+    override fun close() {
+        sample.stop(timer)
+    }
 }

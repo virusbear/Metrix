@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package com.virusbear.metrix
+package com.virusbear.metrix.micrometer.meter
 
-interface MeterRegistry {
-    fun gauge(id: Identifier, tags: Tags = emptyMap()): Gauge
-    fun timer(id: Identifier, tags: Tags = emptyMap()): Timer
-    fun counter(id: Identifier, tags: Tags = emptyMap()): Counter
+import io.micrometer.core.instrument.Gauge
+import io.micrometer.core.instrument.MeterRegistry
+
+internal class AutomaticGaugeSupplier(
+    registry: MeterRegistry,
+    private val supplier: () -> Double
+): GaugeSupplier(registry) {
+    override fun supply(): Double =
+        supplier()
 }
