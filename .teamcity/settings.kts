@@ -61,7 +61,7 @@ object Build : BuildType({
             publisher = github {
                 githubUrl = "https://api.github.com"
                 authType = personalToken {
-                    token = DslContext.getParameter("githubPat")
+                    token = ""
                 }
             }
             param("github_oauth_user", "virusbear")
@@ -70,7 +70,7 @@ object Build : BuildType({
             vcsRootExtId = "${DslContext.settingsRoot.id}"
             provider = github {
                 authType = token {
-                    token = DslContext.getParameter("githubPat")
+                    token = ""
                 }
                 filterAuthorRole = PullRequests.GitHubRoleFilter.EVERYBODY
             }
