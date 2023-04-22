@@ -4,7 +4,7 @@
   <name>Metrix Config DSL Script</name>
 
   <properties>
-    <kotlin.version>1.8.20</kotlin.version>
+    <kotlin.version>1.6.20</kotlin.version>
   </properties>
 
 
